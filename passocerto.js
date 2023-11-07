@@ -28,7 +28,7 @@ app.post("/cadastrousuario" , async(req , res)=>{
    const email = req.body.email;
    const senha=req.body.senha
 
-   const usuario = new usuario({
+   const usuario = new Usuario({
         email : email,
         senha : senha
    })
@@ -40,17 +40,13 @@ app.post("/cadastrousuario" , async(req , res)=>{
 });
 
 
-
-
-
 const ProdutocalcadoSchema = new  mongoose.Schema({
-
-    id_produtocalcado : {type : Number, required:true},
-    descricao : {type : String},
-    marca : {type : String},
-    Data_fabricação : {type: Date},
-    Quantidade_estoque : {type : String}
-
+     id_produtocalcado : {type : String},
+     descricao : {type : String},
+     marca : {type : String},
+     Data_fabricação : {type : String},
+     Quantidade_estoque : {type : Number}
+    
 });
 
 const Produtocalcado = mongoose.model("Produtocalcado",ProdutocalcadoSchema)
@@ -62,7 +58,7 @@ app.post("/cadastroprodutocalcado" , async(req , res)=>{
     const Quantidade_estoque = req.body.Quantidade_estoque;
     
  
-    const produtocalcado = new produtocalcado ({
+    const produtocalcado = new Produtocalcado ({
           id_produtocalcado : id_produtocalcado,
           descricao : descricao,
           marca : marca,
@@ -71,7 +67,7 @@ app.post("/cadastroprodutocalcado" , async(req , res)=>{
     })
 
     try{
-        const newProduto = await Produtocalcado.save();
+        const newProduto = await produtocalcado.save();
         res.json({error : null, msg : "Cadastro ok ", ProdutoId : newProduto._id});
     }catch (error) {}
  })
