@@ -28,6 +28,12 @@ app.post("/cadastrousuario" , async(req , res)=>{
    const email = req.body.email;
    const senha=req.body.senha
 
+   const EmailExiste = await Usuario.findOne({email:email})
+
+    if(EmailExiste){
+        return res.status(400).json({error : "o email cadastrado ja existe"})
+    }
+
    const usuario = new Usuario({
         email : email,
         senha : senha
@@ -57,7 +63,26 @@ app.post("/cadastroprodutocalcado" , async(req , res)=>{
     const Data_fabricação = req.body.Data_fabricação;
     const Quantidade_estoque = req.body.Quantidade_estoque;
     
- 
+    if( id_produtocalcado == null || descricao == null ||marca == null || Data_fabricação == null || Quantidade_estoque == null){
+        return res.status(400).json({error : "Preencha todos os campos"})
+    }
+
+    const idExiste = await Produtocalcado.findOne({id_produtocalcado:id_produtocalcado})
+
+    if(idExiste){
+        return res.status(400).json({error : "o ID cadastrado ja existe"})
+    }
+
+    const quantidadeEstoque = Quantidade_estoque
+    
+    if(quantidadeEstoque > 47){
+        return res.status(400).json({error : "Acabou o estoque"});
+    }
+    else if(quantidadeEstoque <= 0){
+        return res.status(400).json({error : "Você digitou um valor de estoque inválido. Insira um numero de 1 ate 47 "});
+    }
+
+
     const produtocalcado = new Produtocalcado ({
           id_produtocalcado : id_produtocalcado,
           descricao : descricao,
@@ -82,7 +107,7 @@ app.get("/cadastrousuario", async(req, res)=>{
     res.sendFile(__dirname + "/cadastrousuario.html")
   });
   
-app.get("/", async(req, res)=>{
+app.get("/index", async(req, res)=>{
       res.sendFile(__dirname + "/index.html")
   });
 
